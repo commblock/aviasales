@@ -1,4 +1,4 @@
-const API_URL = "https://localhost:7000/api/Table"; 
+const API_URL = "https://localhost:7000/api/table"; 
 
 // 1. Automatically fetch your spreadsheet data from the C# Database on page load
 async function loadTableData() {
@@ -25,7 +25,7 @@ async function loadTableData() {
 loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
-document.querySelector("#myButton").addEventListener("click", () => {
+document.querySelector("#adminButton").addEventListener("click", () => {
     if (prompt("Enter password:") === "Avias@les6767") {
         alert("Access Granted! 67.");
         
