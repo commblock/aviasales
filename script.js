@@ -16,3 +16,13 @@ const tbody = document.querySelector("#myTable tbody");
 tbody.innerHTML = data.map(row => 
     `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`
 ).join('');
+
+document.querySelector("#adminButton").addEventListener("click", () => {
+    if (prompt("Enter super secret password:") === "Avias@les6767") {
+        alert("Access Granted! 67.");
+        // Makes the entire table body editable as plain text strings instantly
+        document.querySelector("#myTable tbody").contentEditable = "true";
+    } else {
+        alert("Access denied!");
+    }
+});

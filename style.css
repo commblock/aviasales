@@ -60,4 +60,25 @@ body {
             text-align: right; /* Aligns data like your original spreadsheet */
         }
     }
+
+    #adminButton {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 15px 30px; 
+        border-radius: 30px;
+        cursor: pointer;
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 15px;
+        font-weight: bolder;
+    }
+
+    #adminButton:hover {
+        transform: translateX(-50%) translateY(-4px);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 10), 
+                    0 0 30px rgba(255, 255, 255, 10);
+    }
 }
