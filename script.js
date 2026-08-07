@@ -25,23 +25,25 @@ async function loadTableData() {
 loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
-document.querySelector("#adminButton").addEventListener("click", () => {
-    if (prompt("Enter password:") === "Avias@les6767") {
-        alert("Access Granted! 67.");
+document.querySelector("#myButton").addEventListener("click", () => {
+    if (prompt("Enter password:") === "secret123") {
+        alert("Access Granted! Click anywhere inside the table to edit.");
         
-        // Ensure this replacement happens inside your focusout block in script.js
+        // ADD THIS LINE HERE: Re-defines tbody so the script can see it
+        const tbody = document.querySelector("#myTable tbody");
+        
+        tbody.contentEditable = "true";
+        
         tbody.addEventListener("focusout", async (event) => {
             const row = event.target.closest("tr");
             if (!row) return;
-        
-            // CORRECT METHOD: Target each layout cell individually by its column position
+
             const updatedData = {
-                name: row.cells[0].innerText.trim(),         // Column 1: Name
-                stars: row.cells[1].innerText.trim(),        // Column 2: Stars string
-                socialCredit: row.cells[2].innerText.trim()   // Column 3: Social Credit string
+                name: row.cells[0].innerText.trim(),         
+                stars: row.cells[1].innerText.trim(),        
+                socialCredit: row.cells[2].innerText.trim()   
             };
-        
-            // Fire the network payload string to your C# Controller
+
             try {
                 const response = await fetch(`${API_URL}/update`, {
                     method: "POST",
@@ -58,7 +60,8 @@ document.querySelector("#adminButton").addEventListener("click", () => {
                 console.error("Failed to write data string to network:", error);
             }
         });
+
     } else {
-        alert("Access denied!");
+        alert("Denied!");
     }
 });
