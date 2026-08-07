@@ -29,34 +29,35 @@ document.querySelector("#adminButton").addEventListener("click", () => {
     if (prompt("Enter password:") === "Avias@les6767") {
         alert("Access Granted! 67.");
         
-        const tbody = document.querySelector("#myTable tbody");
-        tbody.contentEditable = "true";
-        
-        // Listen for when you finish typing and click away from a row
+        // Ensure this replacement happens inside your focusout block in script.js
         tbody.addEventListener("focusout", async (event) => {
             const row = event.target.closest("tr");
             if (!row) return;
-
-            // Grab the fresh text strings straight from the visual table layout
+        
+            // CORRECT METHOD: Target each layout cell individually by its column position
             const updatedData = {
-                name: row.cells[0].innerText.trim(),
-                stars: row.cells[1].innerText.trim(),
-                socialCredit: row.cells[2].innerText.trim()
+                name: row.cells[0].innerText.trim(),         // Column 1: Name
+                stars: row.cells[1].innerText.trim(),        // Column 2: Stars string
+                socialCredit: row.cells[2].innerText.trim()   // Column 3: Social Credit string
             };
-
-            // Fire a POST request across the network to save the edit directly into SQLite
+        
+            // Fire the network payload string to your C# Controller
             try {
-                await fetch(`${API_URL}/update`, {
+                const response = await fetch(`${API_URL}/update`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(updatedData)
                 });
-                console.log("Saved directly to database!");
+                
+                if (response.ok) {
+                    console.log(`Changes for ${updatedData.name} saved straight to SQLite database!`);
+                } else {
+                    console.error("Server rejected the update layout.");
+                }
             } catch (error) {
-                console.error("Failed to write to database:", error);
+                console.error("Failed to write data string to network:", error);
             }
         });
-
     } else {
         alert("Access denied!");
     }
