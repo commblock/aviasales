@@ -1,0 +1,63 @@
+body {
+    background-image: url("favicon.ico");
+
+    /* Table Layout */
+    .data-table {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Header Styling */
+    .data-table th {
+        background-color: #007bff; /* Blue header like your image */
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    /* Data Cell Styling */
+    .data-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333333;
+    }
+
+    /* Zebra Striping (Alternating row colors) */
+    .data-table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Highlight Row on Hover */
+    .data-table tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+    
+    /* Mobile Optimization */
+    @media (max-width: 480px) {
+        .data-table {
+            max-width: 100%;
+            margin: 10px auto;
+            font-size: 13px; /* Slightly smaller text */
+        }
+
+        .data-table th, 
+        .data-table td {
+            padding: 6px 8px; /* Tighter spacing to reduce thickness */
+        }
+
+        /* Force the numeric columns to stay compact */
+        .data-table th:nth-child(2),
+        .data-table td:nth-child(2),
+        .data-table th:nth-child(3),
+        .data-table td:nth-child(3) {
+            width: 25%;
+            text-align: right; /* Aligns data like your original spreadsheet */
+        }
+    }
+}
