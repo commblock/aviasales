@@ -25,43 +25,44 @@ async function loadTableData() {
 loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
-document.querySelector("#myButton").addEventListener("click", () => {
-    if (prompt("Enter password:") === "secret123") {
-        alert("Access Granted! Click anywhere inside the table to edit.");
-        
-        // ADD THIS LINE HERE: Re-defines tbody so the script can see it
-        const tbody = document.querySelector("#myTable tbody");
-        
-        tbody.contentEditable = "true";
-        
-        tbody.addEventListener("focusout", async (event) => {
-            const row = event.target.closest("tr");
-            if (!row) return;
+window.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#adminButton").addEventListener("click", () => {
+        if (prompt("Enter password:") === "Avias@les6767") {
+            alert("Access Granted! 67.");
+            
+            const tbody = document.querySelector("#myTable tbody");
+            tbody.contentEditable = "true";
+            
+            tbody.addEventListener("focusout", async (event) => {
+                const row = event.target.closest("tr");
+                if (!row) return;
 
-            const updatedData = {
-                name: row.cells[0].innerText.trim(),         
-                stars: row.cells[1].innerText.trim(),        
-                socialCredit: row.cells[2].innerText.trim()   
-            };
+                // Ensure index numbers, [1], [2] are targeting the individual cells!
+                const updatedData = {
+                    name: row.cells[0].innerText.trim(),         
+                    stars: row.cells[1].innerText.trim(),        
+                    socialCredit: row.cells[2].innerText.trim()   
+                };
 
-            try {
-                const response = await fetch(`${API_URL}/update`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedData)
-                });
-                
-                if (response.ok) {
-                    console.log(`Changes for ${updatedData.name} saved straight to SQLite database!`);
-                } else {
-                    console.error("Server rejected the update layout.");
+                try {
+                    const response = await fetch(`${API_URL}/update`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(updatedData)
+                    });
+                    
+                    if (response.ok) {
+                        console.log(`Changes for ${updatedData.name} saved straight to SQLite database!`);
+                    } else {
+                        console.error("Server rejected the update layout.");
+                    }
+                } catch (error) {
+                    console.error("Failed to write data string to network:", error);
                 }
-            } catch (error) {
-                console.error("Failed to write data string to network:", error);
-            }
-        });
+            });
 
-    } else {
-        alert("Denied!");
-    }
+        } else {
+            alert("Access denied!");
+        }
+    });
 });
