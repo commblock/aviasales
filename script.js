@@ -1,27 +1,62 @@
-const data = [
-    ["Aviasales", "infinity", "infinity"],
-    ["USA", 22500400, 3170],
-    ["Liam", 5500200, 1010],
-    ["Veronica A.", 2005000, 1000],
-    ["Verinica T.", 2067000, 1000],
-    ["Yura", 6099400, 1465],
-    ["Sean", 6084400, 995],
-    ["Zlata", 22002500, 1197],
-    ["Sasha", 5996000, 1807],
-    ["Gabby", 2002200, 2057],
-    ["Faina", "undefined", 995]
-];
+const API_URL = "https://localhost:7000/api/Table"; 
 
-const tbody = document.querySelector("#myTable tbody");
-tbody.innerHTML = data.map(row => 
-    `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`
-).join('');
+// 1. Automatically fetch your spreadsheet data from the C# Database on page load
+async function loadTableData() {
+    try {
+        const response = await fetch(API_URL);
+        const records = await response.json();
+        
+        const tbody = document.querySelector("#myTable tbody");
+        
+        // Loop through your C# database records to generate your layout rows
+        tbody.innerHTML = records.map(record => `
+            <tr data-name="${record.name}">
+                <td>${record.name}</td>
+                <td>${record.stars}</td>
+                <td>${record.socialCredit}</td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error("Could not read database data:", error);
+    }
+}
 
-document.querySelector("#adminButton").addEventListener("click", () => {
-    if (prompt("Enter super secret password:") === "Avias@les6767") {
+// Initial pull on page load
+loadTableData();
+
+// 2. Click button to enter password and instantly edit cell strings
+document.querySelector("#myButton").addEventListener("click", () => {
+    if (prompt("Enter password:") === "Avias@les6767") {
         alert("Access Granted! 67.");
-        // Makes the entire table body editable as plain text strings instantly
-        document.querySelector("#myTable tbody").contentEditable = "true";
+        
+        const tbody = document.querySelector("#myTable tbody");
+        tbody.contentEditable = "true";
+        
+        // Listen for when you finish typing and click away from a row
+        tbody.addEventListener("focusout", async (event) => {
+            const row = event.target.closest("tr");
+            if (!row) return;
+
+            // Grab the fresh text strings straight from the visual table layout
+            const updatedData = {
+                name: row.cells[0].innerText.trim(),
+                stars: row.cells[1].innerText.trim(),
+                socialCredit: row.cells[2].innerText.trim()
+            };
+
+            // Fire a POST request across the network to save the edit directly into SQLite
+            try {
+                await fetch(`${API_URL}/update`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(updatedData)
+                });
+                console.log("Saved directly to database!");
+            } catch (error) {
+                console.error("Failed to write to database:", error);
+            }
+        });
+
     } else {
         alert("Access denied!");
     }
