@@ -26,28 +26,31 @@ loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
 window.addEventListener("DOMContentLoaded", () => {
+    console.log("Script loaded and connected to HTML layout!"); // If you don't see this, your file isn't linked!
 
     document.querySelector("#adminButton").addEventListener("click", () => {
-        if (prompt("Enter super secret password:") === "Avias@les6767") {
+        if (prompt("Enter super secret password:") === "Avias@les") {
             alert("Access Granted! 67.");
             
             const tbody = document.querySelector("#myTable tbody");
             tbody.contentEditable = "true";
             
-            // This forces tbody to catch focusout events from its child cells!
+            // Listen to focusout directly using event bubbling
             tbody.addEventListener("focusout", async (event) => {
-                // Find the parent row element of the cell that lost focus
-                const row = event.target.closest("tr");
+                const cell = event.target;
+                if (cell.tagName !== "TD") return; // Make sure it's a cell
+
+                const row = cell.closest("tr");
                 if (!row) return;
 
-                // Explicitly grab data columns using correct layout indexing
+                // Grab column strings via explicit index positions
                 const updatedData = {
                     name: row.cells[0].innerText.trim(),         
                     stars: row.cells[1].innerText.trim(),        
                     socialCredit: row.cells[2].innerText.trim()   
                 };
 
-                console.log("Sending update to backend:", updatedData);
+                console.log("Sending update payload:", updatedData);
 
                 try {
                     const response = await fetch(`${API_URL}/update`, {
@@ -57,18 +60,17 @@ window.addEventListener("DOMContentLoaded", () => {
                     });
                     
                     if (response.ok) {
-                        console.log(`Changes for ${updatedData.name} saved straight to SQLite database!`);
+                        console.log("Saved directly to database!");
                     } else {
-                        console.error("Server rejected the update layout.");
+                        console.error("Server rejected change framework.");
                     }
                 } catch (error) {
-                    console.error("Failed to write data string to network:", error);
+                    console.error("Network pipe failed:", error);
                 }
-            }, true);
+            });
 
         } else {
             alert("Access denied!");
         }
     });
-
 });
