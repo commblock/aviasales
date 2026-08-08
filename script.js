@@ -26,23 +26,28 @@ loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
 window.addEventListener("DOMContentLoaded", () => {
+
     document.querySelector("#adminButton").addEventListener("click", () => {
-        if (prompt("Enter password:") === "Avias@les6767") {
+        if (prompt("Enter super secret password:") === "Avias@les6767") {
             alert("Access Granted! 67.");
             
             const tbody = document.querySelector("#myTable tbody");
             tbody.contentEditable = "true";
             
+            // This forces tbody to catch focusout events from its child cells!
             tbody.addEventListener("focusout", async (event) => {
+                // Find the parent row element of the cell that lost focus
                 const row = event.target.closest("tr");
                 if (!row) return;
 
-                // Ensure index numbers, [1], [2] are targeting the individual cells!
+                // Explicitly grab data columns using correct layout indexing
                 const updatedData = {
-                    name: row.cells[0].innerText.trim(),         // Cell [0] is your unique name key (e.g. "Liam")
-                    stars: row.cells[1].innerText.trim(),        // Cell [1] holds your visual Stars text string
-                    socialCredit: row.cells[2].innerText.trim()  // Cell [2] holds your Social Credit text string
+                    name: row.cells[0].innerText.trim(),         
+                    stars: row.cells[1].innerText.trim(),        
+                    socialCredit: row.cells[2].innerText.trim()   
                 };
+
+                console.log("Sending update to backend:", updatedData);
 
                 try {
                     const response = await fetch(`${API_URL}/update`, {
@@ -59,10 +64,11 @@ window.addEventListener("DOMContentLoaded", () => {
                 } catch (error) {
                     console.error("Failed to write data string to network:", error);
                 }
-            });
+            }, true);
 
         } else {
             alert("Access denied!");
         }
     });
+
 });
