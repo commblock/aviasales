@@ -26,28 +26,37 @@ loadTableData();
 
 // 2. Click button to enter password and instantly edit cell strings
 window.addEventListener("DOMContentLoaded", () => {
-    console.log("Script loaded and connected to HTML layout!"); // If you don't see this, your file isn't linked!
+    console.log("Script loaded and connected to HTML layout!"); 
 
     document.querySelector("#adminButton").addEventListener("click", () => {
-        if (prompt("Enter super secret password:") === "Avias@les") {
-            alert("Access Granted! 67.");
+        if (prompt("Enter password:") === "Avias@les6767") {
+            alert("Access Granted! Cells are now unlocked for editing.");
             
+            // 1. Select all individual data cells
+            const cells = document.querySelectorAll("#myTable tbody td");
+            
+            // 2. Loop through every cell and make them individually editable
+            cells.forEach(cell => {
+                cell.contentEditable = "true";
+                
+                // Optional visual cue: changes cursor to text beam on hover
+                cell.style.cursor = "text"; 
+            });
+
+            // 3. Listen for focusout on the table container (events bubble up from cells)
             const tbody = document.querySelector("#myTable tbody");
-            tbody.contentEditable = "true";
-            
-            // Listen to focusout directly using event bubbling
             tbody.addEventListener("focusout", async (event) => {
                 const cell = event.target;
-                if (cell.tagName !== "TD") return; // Make sure it's a cell
+                if (cell.tagName !== "TD") return; // Safety check
 
                 const row = cell.closest("tr");
                 if (!row) return;
 
                 // Grab column strings via explicit index positions
                 const updatedData = {
-                    name: row.cells[0].innerText.trim(),         // First column text string
-                    stars: row.cells[1].innerText.trim(),        // Second column text string
-                    socialCredit: row.cells[2].innerText.trim()  // Third column text string
+                    name: row.cells.innerText.trim(),         
+                    stars: row.cells.innerText.trim(),        
+                    socialCredit: row.cells.innerText.trim()   
                 };
 
                 console.log("Sending update payload:", updatedData);
