@@ -39,9 +39,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 // Ensure index numbers, [1], [2] are targeting the individual cells!
                 const updatedData = {
-                    name: row.cells[0].innerText.trim(),         
-                    stars: row.cells[1].innerText.trim(),        
-                    socialCredit: row.cells[2].innerText.trim()   
+                    name: row.cells[0].innerText.trim(),         // Cell [0] is your unique name key (e.g. "Liam")
+                    stars: row.cells[1].innerText.trim(),        // Cell [1] holds your visual Stars text string
+                    socialCredit: row.cells[2].innerText.trim()  // Cell [2] holds your Social Credit text string
                 };
 
                 try {
