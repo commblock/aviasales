@@ -45,9 +45,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 // Grab column strings via explicit index positions
                 const updatedData = {
-                    name: row.cells[0].innerText.trim(),         
-                    stars: row.cells[1].innerText.trim(),        
-                    socialCredit: row.cells[2].innerText.trim()   
+                    name: row.cells[0].innerText.trim(),         // First column text string
+                    stars: row.cells[1].innerText.trim(),        // Second column text string
+                    socialCredit: row.cells[2].innerText.trim()  // Third column text string
                 };
 
                 console.log("Sending update payload:", updatedData);
